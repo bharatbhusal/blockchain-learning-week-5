@@ -1,0 +1,21 @@
+{
+  "name": "productsupplychain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "node deploy.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ethers": "^6.9.0",
+    "fs": "^0.0.1-security",
+    "hardhat": "^2.19.1",
+    "init": "^0.1.2"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0"
+  }
+}
