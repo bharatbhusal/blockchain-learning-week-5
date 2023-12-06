@@ -4,18 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy": "node deploy.js"
+    "deploy": "npx hardhat compile;npx hardhat run scripts/deploy.js --network localhost",
+    "deploy-goerli": "npx hardhat run scripts/deploy.js --network goerli",
+    "node": "npx hardhat node",
+    "compile": "npx hardhat compile"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ethers": "^6.9.0",
-    "fs": "^0.0.1-security",
-    "hardhat": "^2.19.1",
-    "init": "^0.1.2"
-  },
-  "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^4.0.0"
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.2"
   }
 }

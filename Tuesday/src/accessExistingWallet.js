@@ -7,6 +7,7 @@ async function createWallet(privateKey) {
     const address = wallet.address;
     const infuraProvider = new ethers.JsonRpcProvider(`https://goerli.infura.io/v3/${INFURA_API_KEY}`);
     const balance = formatUnits(await infuraProvider.getBalance(address), 18);
+
     // const hardhatNodeProvider = new ethers.JsonRpcProvider("http://127.0.0.1:8545/");
     // const balance = formatUnits(await hardhatNodeProvider.getBalance(address), 18);
     return { address, balance }
