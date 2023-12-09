@@ -10,12 +10,11 @@ async function sleep(ms) {
 }
 
 async function main() {
-    const TokenBharat = await hre.ethers.deployContract("TokenBharat");
-    const bharatToken = await TokenBharat.deploy("BharatToken", "BHT", 18, 500);
+    const TokenBharat = await hre.ethers.getContractFactory("TokenBharat");
+    const tokenBharat = await TokenBharat.deploy("TokenBharat", "BHT", 18, 500);
+    await tokenBharat.deployed();
 
-    await bharatToken.deployed();
-
-    console.log(`BharatToken contract deployed at ${bharatToken.address}`);
+    console.log(`TokenBharat contract deployed at ${tokenBharat.address}`);
 
     await sleep(55 * 1000);
 
@@ -23,6 +22,8 @@ async function main() {
         address: bharatToken.address,
         constructorArguments: ["Bharat", "BHT", 18, 500],
     });
+    console.log("Contract verified and published.")
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere
