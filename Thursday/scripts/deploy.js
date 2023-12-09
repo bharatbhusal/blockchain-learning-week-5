@@ -13,16 +13,9 @@ async function main() {
     const TokenBharat = await hre.ethers.getContractFactory("TokenBharat");
     const tokenBharat = await TokenBharat.deploy("TokenBharat", "BHT", 18, 500);
     await tokenBharat.deployed();
-
     console.log(`TokenBharat contract deployed at ${tokenBharat.address}`);
 
-    await sleep(55 * 1000);
 
-    await hre.run("verify:verify", {
-        address: bharatToken.address,
-        constructorArguments: ["Bharat", "BHT", 18, 500],
-    });
-    console.log("Contract verified and published.")
 
 }
 
