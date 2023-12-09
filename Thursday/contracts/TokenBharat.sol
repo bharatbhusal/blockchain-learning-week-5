@@ -37,7 +37,7 @@ contract TokenBharat {
     }
 
     // function to mint the tokens
-    function mint(uint256 amount) public {
+    function mint(uint256 amount) public returns (string memory) {
         //only owner can mint.
         require(msg.sender == owner, "Only owner can mint");
         //adding the balance to owner's wallet and increasing the supply.
@@ -45,6 +45,7 @@ contract TokenBharat {
         totalSupply += amount;
 
         emit logMint(msg.sender, amount);
+        return "minted successfully";
     }
 
     //function to burn the tokens.

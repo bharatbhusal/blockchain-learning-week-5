@@ -20,27 +20,34 @@ function createFactory(abi, bytecode, wallet) {
     return new ethers.ContractFactory(abi, bytecode, wallet);
 }
 
-async function deployContract(arguments) {
+async function getOwner(provider) {
+    return (await provider.getSigner().getAddress());
+}
+
+async function deployContract() {
     const { abi, bytecode } = getAbiBytecode("../artifacts/contracts/TokenBharat.sol/TokenBharat.json");
     const provider = createProvider(process.env.HARDHAT_NODE);
     const wallet = createWallet(process.env.PRIVATE_KEY, provider);
     const factory = createFactory(abi, bytecode, wallet);
-    const contract = await factory.deploy(arguments);
+    const contract = await factory.deploy("TokenBharat", "BHT", 18, 500);
     await contract.deployed();
-    return contract.address;
+    return contract
 }
-async function getOwner(provider) {
-    return (await provider.getSigner().getAddress());
+
+//Listening to logMint event
+async function interact(contract) {
+    const eventFilter = contract.filters.logMint();
+    contract.on(eventFilter, (from, amount) => {
+        console.log("Mint evernt: \nMinted to: ", from.toString(), "\nAmount: ", amount.toString())
+    })
+
+    await contract.mint(55);
+
+    contract.off(eventFilter);
 }
-function interact(address, abi, provider) {
-    const contract = new ethers.Contract(address, abi, provider);
-    const owner = provider.getSigner();
-}
+
 async function main() {
-    // console.log(await deployContract("TokenBharat", "BHT", 18, 500))
-    const provider = createProvider(process.env.HARDHAT_NODE);
-    const owner = await getOwner(provider);
-    console.log("Owner--> ", await owner);
+    await interact(await deployContract());
 }
 
 main()
