@@ -9,7 +9,7 @@ const hre = require("hardhat");
 async function main() {
 
     const VotingSystem = await hre.ethers.getContractFactory("VotingSystem")
-    const votingSystem = await VotingSystem.deploy([["Bharat", "Geeta", "Neeta", "Pabitra"]]);
+    const votingSystem = await VotingSystem.deploy(["Bharat", "Geeta", "Neeta", "Pabitra"]);
     await votingSystem.deployed();
 
     console.log(`Contract deployed at ${votingSystem.address}`);
