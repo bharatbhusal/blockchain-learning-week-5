@@ -40,6 +40,8 @@ The owner can add new candidates:
 ```solidity
 function addCandidate(string memory _candidateName) public onlyOwner {
     candidates.push(_candidateName);
+
+   emit CandidateAdded(_candidateName, candidates.length - 1);
 }
 ```
 
@@ -48,6 +50,11 @@ And remove candidates:
 ```solidity
 function removeCandidate(uint256 _candidateIndex) public onlyOwner validCandidate(_candidateIndex) {
     delete candidates[_candidateIndex];
+    
+    emit CandidateRemoved(
+            getNameForIndex(_candidateIndex),
+            _candidateIndex
+        );
 }
 ```
 
