@@ -21,6 +21,12 @@ contract VotingSystem {
     // Event emitted when a voter casts a vote
     event Voted(address indexed voter, string candidate);
 
+    //Event emiited when a candidate is removed
+    event CandidateRemoved(string candidate, uint256 candidateIndex);
+
+    //Event emiited when a candidate is added
+    event CandidateAdded(string candidate, uint256 candidateIndex);
+
     // Modifier to ensure that a voter has not voted before
     modifier newVoter() {
         require(!voters[msg.sender], "Already voted");
@@ -54,11 +60,18 @@ contract VotingSystem {
         uint256 _candidateIndex
     ) public onlyOwner validCandidate(_candidateIndex) {
         delete candidates[_candidateIndex];
+
+        emit CandidateRemoved(
+            getNameForIndex(_candidateIndex),
+            _candidateIndex
+        );
     }
 
     // Function to add a new candidate by the contract owner
     function addCandidate(string memory _candidateName) public onlyOwner {
         candidates.push(_candidateName);
+
+        emit CandidateAdded(_candidateName, candidates.length - 1);
     }
 
     // Function for a voter to cast a vote
