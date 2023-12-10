@@ -3,9 +3,9 @@ pragma solidity 0.8.23;
 
 contract VotingSystem {
     address public owner;
-    string[] public candidates;
+    string[] private candidates;
 
-    event Voted(address indexed voter, uint256 candidateIndex);
+    event Voted(address indexed voter, string candidates);
 
     mapping(address => bool) public voters;
     mapping(string => uint256) votesReceived;
@@ -55,7 +55,7 @@ contract VotingSystem {
         voters[msg.sender] = true;
         votesReceived[getNameForIndex(_candidateIndex)] += 1;
 
-        emit Voted(msg.sender, _candidateIndex);
+        emit Voted(msg.sender, getNameForIndex(_candidateIndex));
     }
 
     function getTotalVotes(
@@ -66,5 +66,13 @@ contract VotingSystem {
 
     function hasVoted(address voter) public view returns (bool) {
         return voters[voter];
+    }
+
+    function getCandidatesWithTotalVotes()
+        public
+        view
+        returns (string[] memory)
+    {
+        return candidates;
     }
 }
