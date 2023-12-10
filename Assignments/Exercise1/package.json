@@ -1,19 +1,20 @@
 {
-  "name": "productsupplychain",
+  "name": "exercise1",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "deploy": "npx hardhat run scripts/deploy.js --network localhost",
-    "deploy-goerli": "npx hardhat run scripts/deploy.js --network goerli",
     "node": "npx hardhat node",
+    "test": "npx hardhat test",
     "compile": "npx hardhat compile"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "ethers": "^5.7.0",
     "hardhat": "^2.19.2"
   }
 }

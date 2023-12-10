@@ -9,17 +9,14 @@ const hre = require("hardhat");
 async function main() {
 
     const onlyAdministratorChecker = await hre.ethers.deployContract("OnlyAdministratorChecker", [], {});
-    await onlyAdministratorChecker.waitForDeployment();
+    await onlyAdministratorChecker.waitForDeployment()
+    //Interacting with Deployed contract
+    console.log(await onlyAdministratorChecker.isAdmin("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"))
 
-    console.log(
-        `OnlyAdministratorChecker Contract Deployed as ${onlyAdministratorChecker.target}.`);
+    const productSuppyChain = await hre.ethers.deployContract("ProductSupplyChain", [onlyAdministratorChecker.target], {})
+    await productSuppyChain.waitForDeployment()
 
-    const productSupplyChain = await hre.ethers.deployContract("ProductSupplyChain", [onlyAdministratorChecker.target], {});
-
-    await productSupplyChain.waitForDeployment();
-
-    console.log(
-        `ProductSupplyChain Contract Deployed at ${productSupplyChain.target}.`);
+    console.log(await productSuppyChain.getProductDetail(1))
 }
 
 // We recommend this pattern to be able to use async/await everywhere
