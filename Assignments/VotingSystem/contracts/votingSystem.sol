@@ -5,6 +5,8 @@ contract VotingSystem {
     address public owner;
     string[] public candidates;
 
+    event Voted(address indexed voter, uint256 candidateIndex);
+
     mapping(address => bool) public voters;
     mapping(string => uint256) votesReceived;
 
@@ -12,8 +14,17 @@ contract VotingSystem {
         require(!voters[msg.sender], "Already voted");
         _;
     }
-    modifier validCandidate(uint256 candidateIndex) {
-        require(candidateIndex < candidates.length, "invalid Candidate Index");
+    modifier validCandidate(uint256 _candidateIndex) {
+        require(_candidateIndex < candidates.length, "Invalid Candidate Index");
+        require(
+            bytes(candidates[_candidateIndex]).length != 0,
+            "Candidate removed by Admin"
+        );
+        _;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not Owner");
         _;
     }
 
@@ -22,10 +33,38 @@ contract VotingSystem {
         candidates = _candidates;
     }
 
+    function removeCandidate(
+        uint256 _candidateIndex
+    ) public onlyOwner validCandidate(_candidateIndex) {
+        delete candidates[_candidateIndex];
+    }
+
+    function addCandidate(string memory _candidateName) public onlyOwner {
+        candidates.push(_candidateName);
+    }
+
+    function getNameForIndex(
+        uint256 _candidateIndex
+    ) private view validCandidate(_candidateIndex) returns (string memory) {
+        return candidates[_candidateIndex];
+    }
+
     function vote(
-        uint256 candidateIndex
-    ) public newVoter validCandidate(candidateIndex) {
+        uint256 _candidateIndex
+    ) public newVoter validCandidate(_candidateIndex) {
         voters[msg.sender] = true;
-        votesReceived[candidates[candidateIndex]] += 1;
+        votesReceived[getNameForIndex(_candidateIndex)] += 1;
+
+        emit Voted(msg.sender, _candidateIndex);
+    }
+
+    function getTotalVotes(
+        uint256 _candidateIndex
+    ) public view returns (uint256) {
+        return votesReceived[getNameForIndex(_candidateIndex)];
+    }
+
+    function hasVoted(address voter) public view returns (bool) {
+        return voters[voter];
     }
 }
