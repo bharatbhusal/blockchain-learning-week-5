@@ -22,9 +22,22 @@ describe("VotingSystem", function () {
     describe("Test Deployment", function () {
         it("Should deploy correctly", async function () {
             // Load the deployment fixture and ensure it runs successfully
-            await loadFixture(deployVotingSystemFixture);
+            const { votingSystem } = await loadFixture(deployVotingSystemFixture);
+            expect(await (await votingSystem.getCandidates())[0]).to.equal("Bharat");
         });
     });
+
+    describe("Test removeCandidate", function () {
+        it("Owner can remove candidate", async function () {
+            const { votingSystem, owner } = await loadFixture(deployVotingSystemFixture);
+            await votingSystem.connect(owner).removeCandidate(0);
+            expect(await (await votingSystem.getCandidates())[0]).to.equal("");
+        })
+        it("Non-Owner can't remove candidate", async function () {
+            const { votingSystem, otherAccount1 } = await loadFixture(deployVotingSystemFixture);
+            await expect(votingSystem.connect(otherAccount1).removeCandidate(0)).to.be.revertedWith("Not Owner");
+        })
+    })
 
     // // Test suite for assignSellerRole function
     // describe("Test assignSellerRole", function () {

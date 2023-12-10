@@ -84,11 +84,7 @@ contract VotingSystem {
     }
 
     // Function to get the list of all candidates
-    function getCandidatesWithTotalVotes()
-        public
-        view
-        returns (string[] memory)
-    {
+    function getCandidates() public view returns (string[] memory) {
         return candidates;
     }
 
