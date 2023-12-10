@@ -6,6 +6,7 @@
   "scripts": {
     "deploy": "npx hardhat run scripts/votingsystem.js --network localhost",
     "deploy-goerli": "npx hardhat run scripts/votingsystem.js --network goerli",
+    "deploy-mumbai": "npx hardhat run scripts/votingsystem.js --network mumbai",
     "node": "npx hardhat node",
     "compile": "npx hardhat compile",
     "test": "npx hardhat test"
