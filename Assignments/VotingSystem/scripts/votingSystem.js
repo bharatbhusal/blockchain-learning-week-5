@@ -7,12 +7,17 @@
 const hre = require("hardhat");
 
 async function main() {
+    //ethers@5.7.0
+    // const VotingSystem = await hre.ethers.getContractFactory("VotingSystem")
+    // const votingSystem = await VotingSystem.deploy(["Bharat", "Geeta", "Neeta", "Pabitra"]);
+    // await votingSystem.deployed();
+    // console.log(`Contract deployed at ${votingSystem.address}`);
 
-    const VotingSystem = await hre.ethers.getContractFactory("VotingSystem")
-    const votingSystem = await VotingSystem.deploy(["Bharat", "Geeta", "Neeta", "Pabitra"]);
-    await votingSystem.deployed();
+    //ethers@6.9.0
+    const votingSystem = await hre.ethers.deployContract("VotingSystem", [["Bharat", "Geeta", "Neeta", "Pabitra"]], {});
+    await votingSystem.waitForDeployment();
+    console.log(`Contract deployed at ${votingSystem.target}`);
 
-    console.log(`Contract deployed at ${votingSystem.address}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
