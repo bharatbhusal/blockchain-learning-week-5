@@ -12,14 +12,14 @@ contract VotingSystem {
     // An array to store the names of candidates
     string[] private candidates;
 
-    // Event emitted when a voter casts a vote
-    event Voted(address indexed voter, string candidate);
-
     // Mapping to track whether an address has voted
     mapping(address => bool) public voters;
 
     // Mapping to store the number of votes received by each candidate
     mapping(string => uint256) votesReceived;
+
+    // Event emitted when a voter casts a vote
+    event Voted(address indexed voter, string candidate);
 
     // Modifier to ensure that a voter has not voted before
     modifier newVoter() {
@@ -61,13 +61,6 @@ contract VotingSystem {
         candidates.push(_candidateName);
     }
 
-    // Function to get the name of a candidate by index
-    function getNameForIndex(
-        uint256 _candidateIndex
-    ) private view validCandidate(_candidateIndex) returns (string memory) {
-        return candidates[_candidateIndex];
-    }
-
     // Function for a voter to cast a vote
     function vote(
         uint256 _candidateIndex
@@ -97,5 +90,12 @@ contract VotingSystem {
         returns (string[] memory)
     {
         return candidates;
+    }
+
+    // Function to get the name of a candidate by index
+    function getNameForIndex(
+        uint256 _candidateIndex
+    ) private view validCandidate(_candidateIndex) returns (string memory) {
+        return candidates[_candidateIndex];
     }
 }
