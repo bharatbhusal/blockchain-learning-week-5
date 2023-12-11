@@ -59,12 +59,10 @@ contract VotingSystem {
     function removeCandidate(
         uint256 _candidateIndex
     ) public onlyOwner validCandidate(_candidateIndex) {
+        string memory candidateName = getNameForIndex(_candidateIndex);
         delete candidates[_candidateIndex];
 
-        emit CandidateRemoved(
-            getNameForIndex(_candidateIndex),
-            _candidateIndex
-        );
+        emit CandidateRemoved(candidateName, _candidateIndex);
     }
 
     // Function to add a new candidate by the contract owner

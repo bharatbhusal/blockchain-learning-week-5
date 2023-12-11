@@ -1,36 +1,25 @@
 const { ethers } = require("ethers");
 require("dotenv/config");
+
+
 const contractAddress = "0x18512185cF9a9CE45A6e2F1E1A5e1cDe4D3429Ac";
-
-function getAbiBytecode(filePath) {
-    const { abi, bytecode } = require(filePath);
-    return { abi, bytecode };
-}
-
-function createProvider(node) {
-    return new ethers.JsonRpcProvider(node);
-}
-
-function createContract(address, abi, provider) {
-    return new ethers.Contract(address, abi, provider);
-}
+const { _, abi } = require("../artifacts/contracts/VotingSystem.sol/VotingSystem.json");
+const provider = new ethers.JsonRpcProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`)
+const contract = new ethers.Contract(contractAddress, abi, provider)
+const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider)
 
 
-function createWallet(privateKey, provider) {
-    return new ethers.Wallet(privateKey, provider);
-}
 
-
-async function sendTransaction(wallet, address, contract, functionName, argumentsList) {
+async function sendTransaction(functionName, argumentsList) {
     try
     {
         const transaction = await wallet.sendTransaction({
-            to: address,
+            to: contractAddress,
             data: contract.interface.encodeFunctionData(functionName, argumentsList),
         });
 
         const receipt = await transaction.wait();
-        console.log('Transaction receipt:', receipt);
+        return receipt;
     } catch (error)
     {
         console.error(error);
@@ -38,36 +27,25 @@ async function sendTransaction(wallet, address, contract, functionName, argument
 }
 
 
-
 // Listening to logMint event
-async function interaction(contract) {
-    const { abi } = getAbiBytecode("../artifacts/contracts/VotingSystem.sol/VotingSystem.json");
-    const provider = createProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`)
-    const contract = createContract(contractAddress, abi, provider)
-    const wallet = createWallet(process.env.PRIVATE_KEY, provider)
+async function interaction() {
+    // const owner = await contract.owner();
+    // const candidates = await contract.getCandidates();
+    // const hasUserVoted = await contract.hasVoted(owner);
+    // const totalVotesBharat = await contract.getTotalVotes(0);
+
+    // console.log("Owner: ", owner, "\nCandidates: ", candidates, "\nHas Owner casted Vote: ", hasUserVoted, "\nTotal votes of Bharat: ", totalVotesBharat);
 
 
+    const candidateName = "Someone";
+    await sendTransaction("removeCandidate", ["0"])
 
-    // const eventFilter = contract.filters.Voted();
-    // contract.on(eventFilter, (voter, candidate) => {
-    //     console.log("Voted event: \nVoted by: ", voter, "\nCandidate: ", candidate);
-    // });
+    console.log(await contract.getCandidates());
 
-
-    const owner = await sendTransaction(createWallet(process.env.PRIVATE_KEY, provider), contractAddress, createContract(contractAddress, abi, provider), "owner", []);
-    console.log(owner)
-    console.log("Candidates: ", await contract.getCandidates());
-
-    console.log("Votes of candidate 0: ", await contract.getTotalVotes(0));
-
-    // contract.off(eventFilter);
 }
 
 async function main() {
-    const { abi } = getAbiBytecode("../artifacts/contracts/VotingSystem.sol/VotingSystem.json");
-    const provider = createProvider(`https://polygon-mumbai.infura.io/v3/${process.env.INFURA_API_KEY}`)
-    const contract = createContract(contractAddress, abi, provider);
-    await interaction(contract);
+    await interaction();
 }
 
 main();
