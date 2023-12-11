@@ -48,13 +48,11 @@ function addCandidate(string memory _candidateName) public onlyOwner {
 And remove candidates:
 
 ```solidity
-function removeCandidate(uint256 _candidateIndex) public onlyOwner validCandidate(_candidateIndex) {
-    delete candidates[_candidateIndex];
-    
-    emit CandidateRemoved(
-            getNameForIndex(_candidateIndex),
-            _candidateIndex
-        );
+ function removeCandidate(uint256 _candidateIndex) public onlyOwner validCandidate(_candidateIndex) {
+        string memory candidateName = getNameForIndex(_candidateIndex);
+        delete candidates[_candidateIndex];
+
+        emit CandidateRemoved(candidateName, _candidateIndex);
 }
 ```
 
